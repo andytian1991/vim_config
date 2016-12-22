@@ -45,6 +45,7 @@ filetype plugin indent on
 "==========================================
 " General Settings 基础设置
 "==========================================
+syntax enable                " 打开语法高亮    my set line
 
 
 " history存储容量
@@ -71,6 +72,7 @@ set shortmess=atI
 
 " 取消备份。 视情况自己改
 set nobackup
+set writebackup              " 设置无备份文件
 " 关闭交换文件
 set noswapfile
 
@@ -88,7 +90,7 @@ set noswapfile
   " " set undodir=/tmp/vimundo/
 " endif
 
-set wildignore=*.swp,*.bak,*.pyc,*.class,.svn
+set wildignore=*.swp,*.bak,*.pyc,*.class,.svn    " my is not set enable
 
 " 突出显示当前列
 set cursorcolumn
@@ -108,7 +110,7 @@ set mouse=a
 " Hide the mouse cursor while typing
 " set mousehide
 
-
+" my are all set not enable below
 " 修复ctrl+m 多光标操作选择的bug，但是改变了ctrl+v进行字符选中时将包含光标下的字符
 set selection=inclusive
 set selectmode=mouse,key
@@ -130,6 +132,7 @@ set magic
 " Configure backspace so it acts as it should act
 set backspace=eol,start,indent
 set whichwrap+=<,>,h,l
+" my are all set not enable above
 
 "==========================================
 " Display Settings 展示/排版等界面格式设置
@@ -147,11 +150,12 @@ set scrolloff=7
 
 " set winwidth=79
 
+set cmdheight=2              " 命令行的高度，默认为1，这里设为2   " my set line
 " 命令行（在状态行下）的高度，默认为1，这里是2
 set statusline=%<%f\ %h%m%r%=%k[%{(&fenc==\"\")?&enc:&fenc}%{(&bomb?\",BOM\":\"\")}]\ %-14.(%l,%c%V%)\ %P
 " Always show the status line - use 2 lines for the status bar
-set laststatus=2
-
+set laststatus=2     " my not set this line
+"set nu!                      " 显示行号
 " 显示行号
 set number
 " 取消换行
@@ -172,6 +176,21 @@ set incsearch
 set ignorecase
 " 有一个或以上大写字母时仍大小写敏感
 set smartcase
+" my set line below
+"set nowrapscan               " 搜索到文件两端时不重新搜索
+
+" my set line below
+set nocompatible             " 关闭兼容模式
+set vb t_vb=                 " 关闭提示音
+set hidden                   " 允许在有未保存的修改时切换缓冲区
+set list                     " 显示Tab符，使用一高亮竖线代替
+set listchars=tab:\|\ ,
+
+set autochdir                " 设定文件浏览器目录为当前目录
+
+set foldmethod=syntax        " 选择代码折叠类型
+set foldlevel=100            " 禁止自动折叠
+" my set line above
 
 " 代码折叠
 set foldenable
@@ -210,22 +229,26 @@ set tabstop=4
 " 每一次缩进对应的空格数
 set shiftwidth=4
 " 按退格键时可以一次删掉 4 个空格
-set softtabstop=4
+set softtabstop=4   "my noe set this line
+
+set backspace=2              " 设置退格键可用    "my set line
+set cindent shiftwidth=4     " 自动缩进4空格   "my set line
+set ai!                      " 设置自动缩进    "my set line
 " insert tabs on the start of a line according to shiftwidth, not tabstop 按退格键时可以一次删掉 4 个空格
 set smarttab
 " 将Tab自动转化成空格[需要输入真正的Tab键时，使用 Ctrl+V + Tab]
 " set expandtab
 " 缩进时，取整 use multiple of shiftwidth when indenting with '<' and '>'
-set shiftround
+set shiftround   "my is not set enable
 
 " A buffer becomes hidden when it is abandoned
-set hidden
-set wildmode=list:longest
-set ttyfast
+set hidden   " my is not set
+set wildmode=list:longest   " my is not set
+set ttyfast   " my is not set
 
 " 00x增减数字时使用十进制
-set nrformats=
-
+set nrformats=     " my is not set 
+ " my is not set below
 " 相对行号: 行号变成相对，可以用 nj/nk 进行跳转
 set relativenumber number
 au FocusLost * :set norelativenumber number
@@ -251,13 +274,16 @@ if &term =~ '256color'
   set t_ut=
 endif
 
+ " my is not set above
 "==========================================
 " FileEncode Settings 文件编码,格式
 "==========================================
 " 设置新文件的编码为 UTF-8
+set fenc=utf-8  " my setting line
 set encoding=utf-8
 " 自动判断编码时，依次尝试以下编码：
-set fileencodings=ucs-bom,utf-8,cp936,gb18030,big5,euc-jp,euc-kr,latin1
+set fileencodings=ucs-bom,utf-8,cp936,gb18030,big5,euc-jp,euc-kr,latin1  "my is set as utf-8,gbk,cp936,latin-1
+" my not set below part
 set helplang=cn
 "set langmenu=zh_CN.UTF-8
 "set enc=2byte-gb18030
@@ -266,13 +292,32 @@ set termencoding=utf-8
 
 " Use Unix as the standard file type
 set ffs=unix,dos,mac
-
+" my not set above part
 " 如遇Unicode值大于255的文本，不必等到空格再折行
 set formatoptions+=m
 " 合并两行中文时，不在中间加空格
 set formatoptions+=B
 
 
+" my setting line below
+" Instead of reverting the cursor to the last position in the buffer, we
+" set it to the first line when editing a git commit message
+au FileType gitcommit au! BufEnter COMMIT_EDITMSG call setpos('.', [0, 1, 1, 0])
+
+highlight clear SignColumn      " SignColumn should match background
+highlight clear LineNr          " Current line number row will have same background color in relative mode
+
+" 每行超过80个的字符用下划线标示
+"au BufRead,BufNewFile *.s,*.asm,*.h,*.c,*.cpp,*.cc,*.java,*.cs,*.erl,*.hs,*.sh,*.lua,*.pl,*.pm,*.php,*.py,*.rb,*.erb,*.vim,*.js,*.css,*.xml,*.html,*.xhtml 2match Underlined /.\%81v/
+
+" For Haskell
+":let hs_highlight_delimiters=1            " 高亮定界符
+":let hs_highlight_boolean=1               " 把True和False识别为关键字
+":let hs_highlight_types=1                 " 把基本类型的名字识别为关键字
+":let hs_highlight_more_types=1            " 把更多常用类型识别为关键字
+":let hs_highlight_debug=1                 " 高亮调试函数的名字
+":let hs_allow_hash_operator=1             " 阻止把#高亮为错误
+" my setting line above
 "==========================================
 " others 其它设置
 "==========================================
@@ -281,6 +326,7 @@ autocmd! bufwritepost _vimrc source %
 " vimrc文件修改之后自动加载, linux
 autocmd! bufwritepost .vimrc source %
 
+" ~~~~~~~~~~~below are not my lines
 " 自动补全配置
 " 让Vim的补全菜单行为与一般IDE一致(参考VimTip1228)
 set completeopt=longest,menu
@@ -705,10 +751,12 @@ endif
 set background=dark
 set t_Co=256
 
+"colorscheme elflord          " 着色模式
 "colorscheme solarized
 colorscheme molokai
 " colorscheme desert
 
+"set guifont=Monaco:h10       " 字体 && 字号
 
 " 设置标记一列的背景颜色和数字一行颜色一致
 hi! link SignColumn   LineNr
