@@ -149,7 +149,7 @@ Plug 'shiftc/vim-ctrlspace'  " my is 'szw/vim-ctrlspace'
 " tagbar
 Plug 'majutsushi/tagbar'
 
-"my not have below part
+"#############my not have below part
 " text object
 " 支持自定义文本对象
 Plug 'kana/vim-textobj-user'
@@ -159,7 +159,6 @@ Plug 'kana/vim-textobj-line'
 Plug 'kana/vim-textobj-entire'
 " 增加缩进文本对象: i   dai yai cii - 相同缩进属于同一块
 Plug 'kana/vim-textobj-indent'
-"my not have above part
 
 if count(g:bundle_groups, 'c')
     " auto complete
@@ -196,8 +195,6 @@ if count(g:bundle_groups, 'golang')
     " vimgo
     "Plug 'fatih/vim-go', {'for': 'go'}
 endif
-
-
 if count(g:bundle_groups, 'python')
     " for python.vim syntax highlight
     " pythonsyntax
@@ -205,22 +202,17 @@ if count(g:bundle_groups, 'python')
     "Plug 'hynek/vim-python-pep8-indent'
     "Plug 'Glench/Vim-Jinja2-Syntax'
 endif
-
 if count(g:bundle_groups, 'php')
     "Plug 'spf13/PIV'
 endif
-
 if count(g:bundle_groups, 'ruby')
     "Plug 'vim-ruby/vim-ruby'
     "Plug 'tpope/vim-rails'
     " dir / dar
     "Plug 'nelstrom/vim-textobj-rubyblock'
-
     " 有bug, 和当前有冲突, 尚未解决, 不要打开
     " Plug 'tpope/vim-endwise'
 endif
-"my not have below part
-
 if count(g:bundle_groups, 'javascript')
     " javascript
     " 注意: syntax这个插件要放前面
@@ -236,41 +228,32 @@ if count(g:bundle_groups, 'javascript')
     " see https://github.com/marijnh/tern_for_vim
     " Plug 'marijnh/tern_for_vim'
 endif
-
-
 if count(g:bundle_groups, 'coffeescript')
     "Plug 'kchmck/vim-coffee-script'
 endif
-
 if count(g:bundle_groups, 'json')
     " json
     "Plug 'elzr/vim-json', {'for': 'json'}
 endif
-
 if count(g:bundle_groups, 'css')
     " css
     " not work in iterm2 which termianl selection is not xterm-256, and it slow
     " Plug 'ap/vim-css-color'
-
     " 这个有坑, see issue https://github.com/wklken/k-vim/issues/49
     " Plug 'gorodinskiy/vim-coloresque'
 endif
-
 if count(g:bundle_groups, 'less')
     " ###### vim.less : less 自动更新##########
     " Plug 'groenewege/vim-less'
     " autocmd BufWritePost *.less :!lessc % > %:p:r.css
 endif
-
+if count(g:bundle_groups, 'nginx')
+    " Plug 'evanmiller/nginx-vim-syntax'
+endif
 if count(g:bundle_groups, 'html')
     " ###### emmet HTML complete #########
     " Plug "mattn/emmet-vim"
 endif
-
-if count(g:bundle_groups, 'nginx')
-    " Plug 'evanmiller/nginx-vim-syntax'
-endif
-
 
 " this is just for beta version
 if count(g:bundle_groups, 'beta')
@@ -282,48 +265,46 @@ if count(g:bundle_groups, 'beta')
     let g:indent_guides_auto_colors = 0
     autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  ctermbg=black
     autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=black
-
 endif
-
-"my not have above part
+"###############my not have above part
 
 "##########################below are my part
-""在头文件和源文件间快速切换的插件
-"Bundle 'a.vim'
-""对齐插件
-"Bundle 'Align'
-"" Tabular 自动对齐  Align multiple line or colomn with special symbol, such as 'Tabularize \='
-""Bundle 'godlygeek/tabular'
-""括号补全插件
-"Bundle 'jiangmiao/auto-pairs'
-""使用bufexplorer插件可以打开历史文件列表以达到快速切换文件的目的
-"Bundle 'bufexplorer.zip'
-"Bundle 'vim-scripts/cSyntaxAfter'
-""缩进提示线插件
-"Bundle 'Yggdroot/indentLine'
-"" 显示树形目录插件
-""Bundle 'vim-scripts/Mark--Karkat'
-""Bundle 'Shougo/neocomplcache'
-""Bundle 'vim-scripts/OmniCppComplete'
-""Bundle 'repeat.vim'
-""Bundle 'msanders/snipmate.vim'
-""Bundle 'vim-scripts/taglist.vim'
-""自动显示跳转函数及变量定义功能
-"Bundle 'wesleyche/SrcExpl'
-""use <Tab> for all your insert completion
-"" Bundle 'ervandew/supertab'
-"Bundle 'std_c.zip'
-"Bundle 'TxtBrowser'
-"Bundle 'ccvext.vim'
-"Bundle 'winmanager'
-"Bundle 'ZoomWin'
+"在头文件和源文件间快速切换的插件
+Plug 'a.vim'
+"对齐插件
+"Plug 'Align'
+" Tabular 自动对齐  Align multiple line or colomn with special symbol, such as 'Tabularize \='
+"Plug 'godlygeek/tabular'
+"括号补全插件
+Plug 'jiangmiao/auto-pairs'
+"使用bufexplorer插件可以打开历史文件列表以达到快速切换文件的目的
+Plug 'bufexplorer.zip'
+Plug 'vim-scripts/cSyntaxAfter'
+"缩进提示线插件
+Plug 'Yggdroot/indentLine'
+" 显示树形目录插件
+"Plug 'vim-scripts/Mark--Karkat'
+"Plug 'Shougo/neocomplcache'
+"Plug 'vim-scripts/OmniCppComplete'
+"Plug 'repeat.vim'
+"Plug 'msanders/snipmate.vim'
+"Plug 'vim-scripts/taglist.vim'
+"自动显示跳转函数及变量定义功能
+Plug 'wesleyche/SrcExpl'
+"use <Tab> for all your insert completion
+" Plug 'ervandew/supertab'
+Plug 'std_c.zip'
+Plug 'TxtBrowser'
+Plug 'ccvext.vim'
+Plug 'winmanager'
+Plug 'ZoomWin'
 ""automatically apply known rules to kernel related files, such as .c, .h,
 ""Kconfig and patch files
-""Bundle 'vivien/vim-addon-linux-coding-style'
-""为C符号的依赖关系树分析仪使用cscope数据库
-"Bundle 'hari-rangarajan/CCTree'
-""提供命令模式下的补全，可以补全缓冲区中出现过的单词
-""Bundle 'CmdlineComplete'
+Plug 'vivien/vim-addon-linux-coding-style'
+"为C符号的依赖关系树分析仪使用cscope数据库
+Plug 'hari-rangarajan/CCTree'
+"提供命令模式下的补全，可以补全缓冲区中出现过的单词
+Plug 'CmdlineComplete'
 ""####################above are my part
 
 " Add plugins to &runtimepath
@@ -333,14 +314,12 @@ call plug#end()
 " ##################插件配置 ####################
 " ################### 基础 ######################
 
-
-"my not have below part
+"####################my not have below part
 " autoload_cscope {{{
     " use our own cscope map
     let g:autocscope_menus=0
 " }}}
-
-"my not have above part
+"####################my not have above part
 
 " syntastic {{{
     " dependence
@@ -352,8 +331,7 @@ call plug#end()
     let g:syntastic_check_on_wq=0
     let g:syntastic_enable_highlighting=1
 
-    " checkers
-    " 最轻量
+    " 最轻量checkers
     " let g:syntastic_python_checkers=['pyflakes'] " 使用pyflakes
     " 中等
     " error code: http://pep8.readthedocs.org/en/latest/intro.html#error-codes
@@ -407,7 +385,6 @@ call plug#end()
     nnoremap <silent> <Plug>LocationNext        :<C-u>exe 'call <SID>LocationNext()'<CR>
     nmap <silent> <Leader>ep    <Plug>LocationPrevious
     nmap <silent> <Leader>en    <Plug>LocationNext
-" my not have below part
 
     " 修改高亮的背景色, 适应主题
     highlight SyntasticErrorSign guifg=white guibg=black
@@ -416,8 +393,6 @@ call plug#end()
     " thanks to @marsqing, see https://github.com/wklken/k-vim/issues/164
     let g:syntastic_mode_map = {'mode': 'active', 'passive_filetypes': ['java', 'cpp', 'c'] }
 " }}}
-
-" my not have above part
 
 " ################### 自动补全 ###################
 
@@ -468,7 +443,6 @@ call plug#end()
     let g:ycm_show_diagnostics_ui = 0      "  my not included
 " }}}
 
-
 " ultisnips {{{
     let g:UltiSnipsExpandTrigger       = "<tab>"
     let g:UltiSnipsJumpForwardTrigger  = "<tab>"
@@ -500,7 +474,6 @@ call plug#end()
     let g:UltiSnipsJumpBackwordTrigger = "<c-k>"
 " }}}
 
-
 " delimitMate {{{
     " for python docstring ",优化输入
     au FileType python let b:delimitMate_nesting_quotes = ['"']
@@ -508,7 +481,6 @@ call plug#end()
     " 关闭某些类型文件的自动补全
     "au FileType mail let b:delimitMate_autoclose = 0
 " }}}
-
 
 " closetag {{{
     let g:closetag_html_style=1
@@ -558,7 +530,6 @@ call plug#end()
     " 重复上一次操作, 类似repeat插件, 很强大
     map <Leader><leader>. <Plug>(easymotion-repeat)
 " }}}
-
 
 " quickscope {{{
     let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
@@ -629,7 +600,6 @@ call plug#end()
     let g:ctrlp_extensions = ['funky']
 " }}}
 
-
 " ctrlsf {{{
     nmap \ <Plug>CtrlSFCwordPath<CR>
     " let g:ctrlsf_position = 'below'
@@ -652,7 +622,7 @@ call plug#end()
         \ }
 " }}}
 
-" git.  git操作还是习惯命令行,vim里面处理简单diff编辑操作
+" git. git操作还是习惯命令行,vim里面处理简单diff编辑操作
 
 " fugitive {{{
     " :Gdiff  :Gstatus :Gvsplit
@@ -696,8 +666,6 @@ call plug#end()
     let g:airline_theme = 'powerlineish'
     " let g:airline_theme = 'lucius'
 " }}}
-
-
 
 " rainbow_parentheses {{{
     " 不加入这行, 防止黑色括号出现, 很难识别
@@ -762,7 +730,6 @@ call plug#end()
     let g:NERDTreeMapOpenSplit = 's'
     let g:NERDTreeMapOpenVSplit = 'v'
 
-
     " nerdtreetabs
     map <Leader>n <plug>NERDTreeTabsToggle<CR>
     " 关闭同步
@@ -774,7 +741,6 @@ call plug#end()
     let g:nerdtree_tabs_open_on_gui_startup=0
 " }}}
 
-
 " Vim Workspace Controller
 " ctrlspace {{{
     let g:airline_exclude_preview = 1
@@ -783,7 +749,6 @@ call plug#end()
     hi CtrlSpaceSearch   guifg=#cb4b16 guibg=NONE gui=bold ctermfg=9 ctermbg=NONE term=bold cterm=bold
     hi CtrlSpaceStatus   guifg=#839496 guibg=#002b36 gui=reverse term=reverse cterm=reverse ctermfg=12 ctermbg=8
 " }}}
-
 
 " 标签导航
 " tagbar {{{
@@ -837,8 +802,7 @@ call plug#end()
     \ }
 " }}}
 
-
-"my not have below part
+"###################my not have below part
 " color_coded {{{
     let g:color_coded_enabled = 1
     " Disable color_coded in diff mode
@@ -848,9 +812,9 @@ call plug#end()
     map <F7> :CCtoggle<CR>
 " }}}
 
-"my not have above part
+"###################my not have above part
 
-" ################### 语言相关 ###################
+"################### 语言相关 ###################
 
 " quickrun {{{
     let g:quickrun_config = {
@@ -864,11 +828,9 @@ call plug#end()
     map <F10> :QuickRun<CR>
 " }}}
 
-
 " pythonsyntax {{{
     let python_highlight_all = 1
 " }}}
-
 
 " vimgo {{{
     let g:go_highlight_functions = 1
@@ -886,7 +848,6 @@ call plug#end()
     let g:vim_markdown_folding_disabled=1
 " }}}
 
-
 " javascript {{{
     " pangloss/vim-javascript
     let g:html_indent_inctags = "html,body,head,tbody"
@@ -903,7 +864,6 @@ call plug#end()
 
 " nginx {{{
 " }}}
-
 
 " ####### temp #######
 
@@ -923,10 +883,8 @@ call plug#end()
 " }}}
 
 "------------------------------------------- end of configs --------------------------------------------
-"my not have below part
 
-
-"~~~~~~~~~~~~~~~~my  part
+"###################below are my part
 " -----------------------------------------------------------------------------
 "  < a.vim 插件配置 >
 " -----------------------------------------------------------------------------
