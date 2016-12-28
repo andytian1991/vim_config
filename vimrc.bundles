@@ -131,6 +131,8 @@ Plug 'vim-airline/vim-airline-themes'
 " rainbow_parentheses
 " 括号显示增强
 Plug 'kien/rainbow_parentheses.vim'
+"缩进提示线
+Plug 'Yggdroot/indentLine'
 " 主题 solarized
 " solarized
 Plug 'altercation/vim-colors-solarized'

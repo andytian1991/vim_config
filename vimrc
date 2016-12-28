@@ -69,13 +69,11 @@ set shortmess=atI
 "set backup
 "set backupext=.bak
 "set backupdir=/tmp/vimbk/
-
 " 取消备份。 视情况自己改
 set nobackup
 set writebackup              " 设置无备份文件
 " 关闭交换文件
-set noswapfile
-
+"set noswapfile
 
 " TODO: remove this, use gundo
 " create undo file
@@ -97,11 +95,9 @@ set cursorcolumn
 " 突出显示当前行
 set cursorline
 
-
 " 设置 退出vim后，内容显示在终端屏幕, 可以用于查看和复制, 不需要可以去掉
 " 好处：误删什么的，如果以前屏幕打开，可以找回
 "set t_ti= t_te=
-
 
 " 鼠标暂不启用, 键盘党....
 "set mouse-=a
@@ -166,9 +162,8 @@ set showmatch
 " How many tenths of a second to blink when matching brackets
 set matchtime=2
 
-
 " 设置文内智能搜索提示
-" 高亮search命中的文本
+" 高亮search命中的文本/
 set hlsearch
 " 打开增量搜索模式,随着键入即时搜索
 set incsearch
