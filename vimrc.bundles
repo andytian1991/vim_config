@@ -192,27 +192,27 @@ if count(g:bundle_groups, 'golang')
     " 1. vim a.go
     " 2. :GoInstallBinaries
     " vimgo
-    Plug 'fatih/vim-go', {'for': 'go'}
+    "Plug 'fatih/vim-go', {'for': 'go'}
 endif
 
 
 if count(g:bundle_groups, 'python')
     " for python.vim syntax highlight
     " pythonsyntax
-    Plug 'hdima/python-syntax'
-    Plug 'hynek/vim-python-pep8-indent'
-    Plug 'Glench/Vim-Jinja2-Syntax'
+    "Plug 'hdima/python-syntax'
+    "Plug 'hynek/vim-python-pep8-indent'
+    "Plug 'Glench/Vim-Jinja2-Syntax'
 endif
 
 if count(g:bundle_groups, 'php')
-    Plug 'spf13/PIV'
+    "Plug 'spf13/PIV'
 endif
 
 if count(g:bundle_groups, 'ruby')
-    Plug 'vim-ruby/vim-ruby'
-    Plug 'tpope/vim-rails'
+    "Plug 'vim-ruby/vim-ruby'
+    "Plug 'tpope/vim-rails'
     " dir / dar
-    Plug 'nelstrom/vim-textobj-rubyblock'
+    "Plug 'nelstrom/vim-textobj-rubyblock'
 
     " 有bug, 和当前有冲突, 尚未解决, 不要打开
     " Plug 'tpope/vim-endwise'
@@ -222,12 +222,12 @@ endif
 if count(g:bundle_groups, 'javascript')
     " javascript
     " 注意: syntax这个插件要放前面
-    Plug 'othree/yajs.vim' | Plug 'pangloss/vim-javascript'
+    "Plug 'othree/yajs.vim' | Plug 'pangloss/vim-javascript'
     " Plug 'jelera/vim-javascript-syntax' | Plug 'pangloss/vim-javascript'
 
     " TODO: jquery? for, remove or keep
-    Plug 'othree/javascript-libraries-syntax.vim'
-    let g:used_javascript_libs = 'jquery,underscore,backbone'
+    "Plug 'othree/javascript-libraries-syntax.vim'
+    "let g:used_javascript_libs = 'jquery,underscore,backbone'
 
     " for javascript 自动补全, 配合YCM, 需要安装全局环境的（非nvm中) node.js&npm
     " 安装完成后还需要在 bundle/tern_for_vim 下执行 npm install 安装依赖
@@ -237,12 +237,12 @@ endif
 
 
 if count(g:bundle_groups, 'coffeescript')
-    Plug 'kchmck/vim-coffee-script'
+    "Plug 'kchmck/vim-coffee-script'
 endif
 
 if count(g:bundle_groups, 'json')
     " json
-    Plug 'elzr/vim-json', {'for': 'json'}
+    "Plug 'elzr/vim-json', {'for': 'json'}
 endif
 
 if count(g:bundle_groups, 'css')
