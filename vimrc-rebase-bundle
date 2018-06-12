@@ -206,7 +206,7 @@ endif
 
 "##########################below are my part
 "在头文件和源文件间快速切换的插件
-"Plug 'a.vim'
+Plug 'a.vim'
 "对齐插件
 "Plug 'Align'
 " Tabular 自动对齐  Align multiple line or colomn with special symbol, such as 'Tabularize \='
@@ -214,19 +214,10 @@ endif
 "括号补全插件
 Plug 'jiangmiao/auto-pairs'
 "使用bufexplorer插件可以打开历史文件列表以达到快速切换文件的目的
-"Plug 'bufexplorer.zip'
+Plug 'bufexplorer.zip'
 Plug 'vim-scripts/cSyntaxAfter'
 "括号显示增强
 Plug 'kien/rainbow_parentheses.vim'
-
-"[vim-plug] Invalid argument: a.vim (implicit `vim-scripts' expansion is deprecated)
-"[vim-plug] Invalid argument: bufexplorer.zip (implicit `vim-scripts' expansion is deprecated)
-"[vim-plug] Invalid argument: std_c.zip (implicit `vim-scripts' expansion is deprecated)
-"[vim-plug] Invalid argument: TxtBrowser (implicit `vim-scripts' expansion is deprecated)
-"[vim-plug] Invalid argument: ccvext.vim (implicit `vim-scripts' expansion is deprecated)
-"[vim-plug] Invalid argument: winmanager (implicit `vim-scripts' expansion is deprecated)
-"[vim-plug] Invalid argument: ZoomWin (implicit `vim-scripts' expansion is deprecated)
-"[vim-plug] Invalid argument: CmdlineComplete (implicit `vim-scripts' expansion is deprecated)
 
 "Plug 'vim-scripts/Mark--Karkat'
 "Plug 'Shougo/neocomplcache'
@@ -238,18 +229,18 @@ Plug 'kien/rainbow_parentheses.vim'
 Plug 'wesleyche/SrcExpl'
 "use <Tab> for all your insert completion
 " Plug 'ervandew/supertab'
-"Plug 'std_c.zip'
-"Plug 'TxtBrowser'
-"Plug 'ccvext.vim'
-"Plug 'winmanager'
-"Plug 'ZoomWin'
+Plug 'std_c.zip'
+Plug 'TxtBrowser'
+Plug 'ccvext.vim'
+Plug 'winmanager'
+Plug 'ZoomWin'
 ""automatically apply known rules to kernel related files, such as .c, .h,
 ""Kconfig and patch files
 Plug 'vivien/vim-addon-linux-coding-style'
 "为C符号的依赖关系树分析仪使用cscope数据库
 Plug 'hari-rangarajan/CCTree'
 "提供命令模式下的补全，可以补全缓冲区中出现过的单词
-"Plug 'CmdlineComplete'
+Plug 'CmdlineComplete'
 ""####################above are my part
 
 " Add plugins to &runtimepath
