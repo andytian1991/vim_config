@@ -1,0 +1,540 @@
+" ==========================================
+" 插件管理,自定义需要的插件集合
+" ==========================================
+set nocompatible
+
+let g:vimbundle = {}
+let g:vimbundle.os = {}
+let g:vimbundle.os.linux = has('unix') && !has('macunix') && !has('win32unix')
+let g:vimbundle.os.windows = has('win32')
+
+let g:vimbundle.vim8 = exists('*job_start')
+let g:vimbundle.timer = exists('*timer_start')
+let g:vimbundle.gui = has('gui_running')
+let g:vimbundle.nvim = has('nvim') && exists('*jobwait') && !g:vimbundle.os.windows
+let g:vimbundle.tmux = !empty($TMUX)
+
+" inspired by spf13, 修改g:bundle_groups 即可选择安装的插件集合
+"ycmd tmux docker autocompletion deoplete syntaxchecking
+"python markdown javascript java html goyo emoji chinese
+"filemanager unite fzf ctrlp betterdefaults programming editing formatting
+"bettermotion textalign cscope ctags git github codesnippets
+"ccpp airline whichkey
+
+if !exists('g:bundle_groups')
+	let g:bundle_groups=['filemanager','unite','fzf', 'ctrlp','betterdefaults', 'programming',
+				\ 'editing', 'formatting',  'bettermotion', 'textalign','cscope', 'ctags',
+				\ 'git', 'github', 'ccpp', 'airline', 'whichkey',]
+endif
+
+if g:vimbundle.timer && filereadable(expand("~/.vim/vim8.vim"))
+       source ~/.vim/vim8.vim
+endif
+
+" ==========================================
+" 使用 vim-plug 管理插件 vim plugin bundle control
+" ==========================================
+let PLUG_PATH = '~/.vim/bundle'
+set rtp+=PLUG_PATH
+
+call plug#begin(PLUG_PATH)
+
+Plug 'liuchengxu/space-vim-dark'
+Plug 'shiftc/molokai'
+
+if count(g:bundle_groups, 'filemanager')
+" Plug  'danro/rename.vim', { 'on' : 'Rename' }
+
+	Plug  'scrooloose/nerdtree', { 'on': ['NERDTreeToggle', 'NERDTreeFind'] }
+	" Refer to https://github.com/junegunn/dotfiles  vimrc
+	source ~/.vim/layers/filemanager/nerdtree.vim
+	autocmd! User nerdtree call layers#filemanager#nerdtree#Init()
+	augroup loadNerdtree
+		autocmd!
+		autocmd VimEnter * silent! autocmd! FileExplorer
+		autocmd BufEnter,BufNew *
+					\  if isdirectory(expand('<amatch>'))
+					\|   call plug#load('nerdtree')
+					\|   call nerdtree#checkForBrowse(expand("<amatch>"))
+					\| endif
+	augroup END
+
+	Plug  'Xuyuanp/nerdtree-git-plugin', { 'on': ['NERDTreeToggle', 'NERDTreeFind'] }
+
+	source ~/.vim/layers/filemanager/config.vim
+endif
+
+if count(g:bundle_groups, 'unite')
+	" temporarily disabled
+	" Plug 'Shougo/denite.nvim'
+	if g:vimbundle.timer
+		Plug 'Shougo/unite.vim', { 'on': [] }
+		autocmd! User unite.vim call layers#unite#unite#Init()
+		call timer_start(500, 'vim8#deferunite')
+	else
+		Plug 'Shougo/unite.vim'
+	endif
+
+	source ~/.vim/layers/unite/config.vim
+endif
+if count(g:bundle_groups, 'fzf')
+	"if g:vimbundle.gui && !has('terminal')
+		Plug 'Yggdroot/LeaderF'
+        "Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
+	"else
+		if g:vimbundle.timer
+			Plug 'junegunn/fzf',  { 'dir': '~/.fzf', 'do': './install --all', 'on': [] }
+			Plug 'junegunn/fzf.vim', { 'on': [] }
+			call timer_start(700, 'vim8#deferfzf')
+		else
+			Plug 'junegunn/fzf',  { 'dir': '~/.fzf', 'do': './install --all' }
+			Plug 'junegunn/fzf.vim'
+		endif
+	"endif
+
+	source ~/.vim/layers/fzf/config.vim
+endif
+if count(g:bundle_groups, 'ctrlp')
+	if count(g:bundle_groups, 'tmux')
+		Plug  'ctrlpvim/ctrlp.vim'
+		Plug  'FelikZ/ctrlp-py-matcher'
+	else
+		Plug  'ctrlpvim/ctrlp.vim',      { 'on': ['CtrlP', 'CtrlPMRU'] }
+		Plug  'FelikZ/ctrlp-py-matcher', { 'on': ['CtrlP', 'CtrlPMRU'] }
+        "Plug 'tacahiroy/ctrlp-funky'
+	endif
+
+	source ~/.vim/layers/ctrlp/config.vim
+endif
+
+if count(g:bundle_groups, 'betterdefaults')
+	if g:vimbundle.timer
+		Plug  'kshenoy/vim-signature'        , { 'on': [] }
+		Plug  'tpope/vim-rsi'                , { 'on': [] }
+		Plug  'xtal8/traces.vim'             , { 'on': [] }
+		Plug  'dominikduda/vim_current_word' , { 'on': [] }
+		call timer_start(500, 'vim8#deferdefaults')
+	else
+	Plug  'tpope/vim-rsi'                           "what for???"
+	Plug  'dominikduda/vim_current_word'
+"Plug  'kshenoy/vim-signature'
+	endif
+
+	Plug  't9md/vim-choosewin', { 'on': '<Plug>(choosewin)' }
+"Plug  'ntpeters/vim-better-whitespace', { 'on': 'StripWhitespace' }
+
+	"if has('patch-8.0.1238')
+	"	Plug  'haya14busa/is.vim'
+	"	Plug  'osyo-manga/vim-anzu', { 'on': ['<Plug>(anzu-n-with-echo)', '<Plug>(anzu-N-with-echo)'] }
+	"else
+	Plug  'google/vim-searchindex'
+	if !g:vimbundle.nvim
+" how to use below two????
+		Plug  'haya14busa/incsearch.vim', { 'on': [ '<Plug>(incsearch-forward)', '<Plug>(incsearch-backward)', '<Plug>(incsearch-stay)' ]}
+		Plug  'haya14busa/incsearch-fuzzy.vim', { 'on': [ '<Plug>(incsearch-fuzzy-/)', '<Plug>(incsearch-fuzzy-?)', '<Plug>(incsearch-fuzzy-stay)' ]}
+		endif
+	"endif
+
+	source ~/.vim/layers/betterdefaults/config.vim
+endif
+
+if count(g:bundle_groups, 'programming')
+	if g:vimbundle.timer
+		Plug  'luochen1990/rainbow'  , { 'on': [] }
+		Plug  'sheerun/vim-polyglot' , { 'on': [] }
+		Plug  'airblade/vim-rooter'  , { 'on': []}
+		call timer_start(400, 'vim8#deferprogramming')
+	else
+		Plug  'luochen1990/rainbow'
+		Plug  'sheerun/vim-polyglot'
+		Plug  'airblade/vim-rooter'   "what to use for???"
+	endif
+
+	Plug  'editorconfig/editorconfig-vim', { 'on': 'EditorConfigReload' }
+	Plug  'matze/vim-move', { 'on': [ '<Plug>MoveBlockDown', '<Plug>MoveBlockUp', '<Plug>MoveLineDown', '<Plug>MoveLineUp', ]}
+"Plug  'junegunn/rainbow_parentheses.vim',  { 'for': ['lisp', 'clojure', 'scheme'] }
+
+	" Need to disable airline extension for tagbar, see vim-airline issue 1313.
+	Plug  'majutsushi/tagbar', { 'on': 'TagbarToggle' }
+	Plug  'Yggdroot/indentLine',             { 'on': 'IndentLinesToggle' }
+	Plug  'nathanaelkane/vim-indent-guides', { 'on': 'IndentGuidesToggle' }
+	autocmd! User indentLine,vim-indent-guides call layers#programming#indent#Init()
+
+"Plug  'skywind3000/asyncrun.vim',        { 'on': ['AsyncRun!', 'AsyncRun'] }
+
+	source ~/.vim/layers/programming/config.vim
+endif
+
+if count(g:bundle_groups, 'editing')
+	Plug  'tpope/vim-surround'
+	Plug  'pelodelfuego/vim-swoop'
+	Plug  'terryma/vim-multiple-cursors'
+	Plug  'jiangmiao/auto-pairs', { 'on': [] }
+    Plug  'scrooloose/nerdcommenter', { 'on': '<Plug>NERDCommenterToggle' }
+
+	augroup vimAutoPairs
+		autocmd!
+		autocmd CursorHold,CursorHoldI,InsertEnter * call plug#load('auto-pairs') | call AutoPairsTryInit() | autocmd! vimAutoPairs
+	augroup END
+
+	source ~/.vim/layers/editing/config.vim
+endif
+
+if count(g:bundle_groups, 'formatting')
+	Plug  'Chiel92/vim-autoformat',          { 'on': 'Autoformat' }
+
+	source ~/.vim/layers/formatting/config.vim
+endif
+
+if count(g:bundle_groups, 'bettermotion')
+	Plug  'unblevable/quick-scope'
+
+	if g:vimbundle.timer
+		Plug  'justinmk/vim-sneak'                  , { 'on': [] }
+		Plug  'easymotion/vim-easymotion'           , { 'on': [] }
+		Plug  'haya14busa/incsearch-easymotion.vim' , { 'on': [] }
+		call timer_start(600, 'vim8#defermotion')
+	else
+		Plug  'justinmk/vim-sneak'
+		Plug  'easymotion/vim-easymotion'
+		Plug  'haya14busa/incsearch-easymotion.vim', { 'on': ['<Plug>(easymotion-prefix)','<Plug>(easymotion-bd-f)','<Plug>(easymotion-overwin-f)','<Plug>(easymotion-overwin-f2)','<Plug>(easymotion-bd-jk)','<Plug>(easymotion-overwin-line)','<Plug>(easymotion-bd-w)', '<Plug>(easymotion-overwin-w)',] }
+	endif
+
+	source ~/.vim/layers/bettermotion/config.vim
+endif
+
+if count(g:bundle_groups, 'textalign')
+	Plug  'godlygeek/tabular',        { 'on': 'Tabularize' }
+	Plug  'junegunn/vim-easy-align',  { 'on': [ '<Plug>(EasyAlign)', 'EasyAlign' ] }
+
+	source ~/.vim/layers/textalign/config.vim
+endif
+
+if count(g:bundle_groups, 'cscope')
+	Plug  'romainl/vim-qf'
+
+"source ~/.vim/layers/cscope/config.vim
+endif
+
+if count(g:bundle_groups, 'ctags')
+	Plug  'ludovicchabant/vim-gutentags',  { 'for': ['c', 'cpp'] }
+	"ty-------autocmd! User vim-gutentags call spacevim#autocmd#gutentags#Init()
+
+"source ~/.vim/layers/ctags/config.vim
+endif
+
+if count(g:bundle_groups, 'git')
+	Plug  'junegunn/gv.vim', { 'on': ['GV', 'GV!'] }
+
+	if g:vimbundle.timer
+		Plug  'tpope/vim-fugitive'     , { 'on': [] }
+		Plug  'airblade/vim-gitgutter' , { 'on': [] }
+		call timer_start(300, 'vim8#defergitgutter')
+		call timer_start(800, 'vim8#deferfugitive')
+	else
+		Plug  'tpope/vim-fugitive'
+		Plug  'airblade/vim-gitgutter'
+	endif
+
+	source ~/.vim/layers/git/config.vim
+endif
+
+if count(g:bundle_groups, 'github')
+	Plug  'junegunn/vim-github-dashboard', { 'on': ['GHDashboard', 'GHActivity'] }
+	Plug  'mattn/webapi-vim',              { 'on': 'Gist' }
+	Plug  'mattn/gist-vim',                { 'on': 'Gist' }
+
+	source ~/.vim/layers/github/config.vim
+endif
+
+if count(g:bundle_groups, 'codesnippets')
+	" Refer to https://github.com/junegunn/vim-plug/wiki/faq
+	" Load on nothing
+	Plug  'SirVer/ultisnips', { 'on': [] }
+	Plug  'honza/vim-snippets', { 'on': [] }
+
+	augroup loadSnips
+		autocmd!
+		autocmd InsertEnter * call plug#load('ultisnips', 'vim-snippets')
+					\| autocmd! loadSnips
+	augroup END
+
+"source ~/.vim/layers/codesnippets/config.vim
+endif
+
+if count(g:bundle_groups, 'syntaxchecking')
+    if g:vimbundle.vim8
+        Plug 'w0rp/ale',  { 'on': [] }
+        call timer_start(200, 'vim8#deferale')
+    else
+        Plug 'scrooloose/syntastic',     { 'on': 'SyntasticCheck' }
+    endif
+
+"source ~/.vim/layers/syntaxchecking/config.vim
+endif
+
+if count(g:bundle_groups, 'ccpp')
+	Plug  'rhysd/vim-clang-format',           { 'for': [ 'c', 'cpp' ] }
+	Plug  'octol/vim-cpp-enhanced-highlight', { 'for': [ 'c', 'cpp' ] }
+
+	source ~/.vim/layers/ccpp/config.vim
+endif
+
+if count(g:bundle_groups, 'airline')
+	if g:vimbundle.timer
+		Plug  'vim-airline/vim-airline-themes' , { 'on': [] }
+		Plug  'vim-airline/vim-airline'        , { 'on': [] }
+		" The waiting time for airline should be longer than the one for fugitive
+		" and ale.
+		call timer_start(250, 'vim8#deferairline')
+	else
+		Plug  'vim-airline/vim-airline-themes'
+		Plug  'vim-airline/vim-airline'
+	endif
+
+	" vim-airline {
+	let g:airline_theme='violet'
+	let g:Powerline_symbols='fancy'
+	let g:airline#extensions#branch#enabled = 1
+	let g:airline#extensions#tabline#enabled=1
+	let g:airline#extensions#tabline#buffer_idx_mode = 1
+	let g:airline#extensions#tabline#buffer_nr_show = 1
+	let g:airline#extensions#tabline#buffer_nr_format = '%s:'
+	let g:airline#extensions#tabline#fnamemod = ':t'
+	let g:airline#extensions#tabline#fnamecollapse = 1
+	let g:airline#extensions#tabline#fnametruncate = 0
+	let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
+	let g:airline#extensions#default#section_truncate_width = { 'b': 79, 'x': 60, 'y': 88, 'z': 45, 'warning': 80, 'error': 80, }
+	let g:airline#extensions#default#layout = [ [ 'a', 'error', 'warning', 'b', 'c' ], [ 'x', 'y', 'z' ] ]
+
+	let g:vimbundle#plug#airline#symbols = {}
+	let g:vimbundle#plug#airline#symbols.linenr = '␊'
+	let g:vimbundle#plug#airline#symbols.linenr = '␤'
+	let g:vimbundle#plug#airline#symbols.linenr = '¶'
+	let g:vimbundle#plug#airline#symbols.branch = '⎇'
+	let g:vimbundle#plug#airline#symbols.paste = 'Þ'
+	let g:vimbundle#plug#airline#symbols.whitespace = 'Ξ'
+
+	" Distinct background color is enough to discriminate the warning and error information.
+	let g:airline#extensions#ale#error_symbol = '•'
+	let g:airline#extensions#ale#warning_symbol = '•'
+	" }
+
+	if !exists('g:airline_powerline_fonts')
+		let g:airline_left_sep=''
+		let g:airline_right_sep=''
+		if !g:vimbundle.os.windows
+			let g:airline_synbols = g:vimbundle#plug#airline#symbols
+		endif
+	endif
+endif
+
+if count(g:bundle_groups, 'whichkey')
+"Plug 'hecal3/vim-leader-guide'
+
+"source ~/.vim/layers/whichkey/config.vim
+endif
+
+"{
+if count(g:bundle_groups, 'under-test')
+if has('python3') && executable('python3')
+    let g:python_version = 3
+    if !WINDOWS()
+        silent! python3 1
+    endif
+elseif has('python') && executable('python')
+    let g:python_version = 2
+    if !WINDOWS()
+        silent! python 1
+    endif
+else
+    let g:python_version = 0
+endif
+
+Plug 'jistr/vim-nerdtree-tabs'
+Plug 'tpope/vim-commentary'
+Plug 'mbbill/undotree'
+Plug 'tpope/vim-repeat'
+Plug 'brooth/far.vim'
+if executable('ag') || executable('ack') || executable('rg') || executable('pt')
+    Plug 'dyng/ctrlsf.vim'
+elseif v:version >= 800 && !WINDOWS() && executable('ctags')
+    Plug 'damage220/vim-finder'
+endif
+" signs
+if has('signs')
+Plug 'gorodinskiy/vim-coloresque'
+Plug 'rhysd/conflict-marker.vim'
+Plug 'mhinz/vim-signify'
+endif
+Plug 'bling/vim-bufferline'
+" Pymode for python
+if count(g:plug_groups, 'pymode') && g:python_version
+    Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
+endif
+" syntax check and run method
+if v:version >= 800
+    if count(g:plug_groups, 'syntax')
+        Plug 'w0rp/ale'
+    endif
+Plug 'wsdjeg/FlyGrep.vim'
+elseif v:version >= 704
+    if count(g:plug_groups, 'syntax')
+        Plug 'vim-syntastic/syntastic'
+    endif
+endif
+Plug 'thinca/vim-quickrun'
+" complete_engine && complete_snippet
+let g:complete_engine  = "None"
+let g:complete_snippet = "ultisnips"
+let g:smart_engine_select = 0
+            " engines
+            if count(g:plug_groups, 'youcompleteme') || count(g:plug_groups, 'YCM')
+                if executable('cmake') && g:python_version && !WINDOWS()
+                    let g:complete_engine = "YCM"
+                else
+                    echoe "Cannot install YouCompleteMe, smart select a complete_engine."
+                    let g:smart_engine_select = 1
+                endif
+            elseif count(g:plug_groups, 'deoplete')
+                if g:python_version == 3 && v:version >= 800 && has('timers') && !WINDOWS()
+                    let g:complete_engine = "deoplete"
+                else
+                    echoe "Cannot install deoplete, smart select a complete_engine."
+                    let g:smart_engine_select = 1
+                endif
+            elseif count(g:plug_groups, 'ncm2')
+                if g:python_version == 3 && v:version >= 800 && has('nvim') && !WINDOWS()
+                    let g:complete_engine = "ncm2"
+                else
+                    echoe "Cannot install ncm2, smart select a complete_engine."
+                    let g:smart_engine_select = 1
+                endif
+            elseif count(g:plug_groups, 'coc')
+                if (has('nvim') && v:version >= 800 || !has('nvim') && v:version >= 801) && executable('node') && executable('yarn')
+                    let g:complete_engine = "coc"
+                else
+                    echoe "Cannot install coc, smart select a complete_engine."
+                    let g:smart_engine_select = 1
+                endif
+            elseif count(g:plug_groups, 'asyncomplete')
+                if v:version >= 800 && has('timers')
+                    let g:complete_engine = "asyncomplete"
+                else
+                    echoe "Cannot install asyncomplete, smart select a complete_engine."
+                    let g:smart_engine_select = 1
+                endif
+            elseif count(g:plug_groups, 'neocomplete')
+                if has('lua')
+                    let g:complete_engine = "neocomplete"
+                else
+                    echoe "Cannot install neocomplete, smart select a complete_engine."
+                    let g:smart_engine_select = 1
+                endif
+            elseif count(g:plug_groups, 'neocomplcache')
+                let g:complete_engine = "neocomplcache"
+            endif
+
+            " smart select
+            if count(g:plug_groups, 'smartcomplete') || g:smart_engine_select
+                " vim8
+                if v:version >= 800
+                    if g:python_version == 3
+                        let g:complete_engine = "deoplete"
+                    elseif v:version >= 801 && executable('node') && executable('yarn')
+                        let g:complete_engine = "coc"
+                    else
+                        let g:complete_engine = "asyncomplete"
+                    endif
+                elseif has('lua')
+                    let g:complete_engine = "neocomplete"
+                else
+                    let g:complete_engine = "neocomplcache"
+                endif
+            endif
+            unlet g:smart_engine_select
+
+            " install snippets plugins
+            if g:complete_engine != "None"
+                Plug 'Shougo/neco-vim'
+            endif
+            if g:complete_engine == "neocomplete" || g:complete_engine == "neocomplcache" || count(g:plug_groups, 'snippet')
+                if g:python_version &&  g:complete_snippet == "ultisnips"
+                    Plug 'SirVer/ultisnips'
+                    Plug 'honza/vim-snippets'
+                    Plug 'leoatchina/leoatchina-snippets'
+                else
+                    let g:complete_snippet = "neosnippet"
+                    Plug 'Shougo/neosnippet'
+                    Plug 'Shougo/neosnippet-snippets'
+                endif
+            else
+                let g:complete_snippet = "None"
+            endif
+
+            " install complete plugins
+            if g:complete_engine == "deoplete"
+                    Plug 'Shougo/deoplete.nvim'
+                    Plug 'roxma/vim-hug-neovim-rpc'
+                    Plug 'roxma/nvim-yarp'
+                Plug 'Shougo/neoinclude.vim'
+                Plug 'zchee/deoplete-clang', {'for': ['c', 'cpp']}
+                Plug 'zchee/deoplete-jedi', {'for': 'python'}
+            elseif g:complete_engine == "ncm2"
+                Plug 'ncm2/ncm2'
+                Plug 'roxma/nvim-yarp'
+                " main complete
+                Plug 'ncm2/ncm2-bufword'
+                Plug 'ncm2/ncm2-path'
+                Plug 'ncm2/ncm2-github'
+                Plug 'ncm2/ncm2-tagprefix'
+                Plug 'filipekiss/ncm2-look.vim'
+                Plug 'ncm2/ncm2-vim', {'for':'vim'}
+                Plug 'ncm2/ncm2-neoinclude'
+                Plug 'Shougo/neoinclude.vim'
+                Plug 'Shougo/neco-syntax'
+                " language
+                Plug 'ncm2/ncm2-pyclang', {'for':['c', 'cpp']}
+                Plug 'autozimu/LanguageClient-neovim', {'branch': 'next','do': 'bash install.sh',}
+                if g:complete_snippet == "ultisnips"
+                    Plug 'ncm2/ncm2-ultisnips'
+                endif
+            elseif g:complete_engine == "coc"
+                Plug 'neoclide/coc.nvim', {'do': './install.sh'}
+            elseif g:complete_engine == "asyncomplete"
+                Plug 'prabirshrestha/asyncomplete.vim'
+                Plug 'prabirshrestha/async.vim'
+                Plug 'prabirshrestha/vim-lsp'
+                Plug 'prabirshrestha/asyncomplete-lsp.vim'
+                Plug 'yami-beta/asyncomplete-omni.vim'
+                Plug 'prabirshrestha/asyncomplete-buffer.vim'
+                Plug 'prabirshrestha/asyncomplete-emoji.vim'
+                Plug 'prabirshrestha/asyncomplete-file.vim'
+                Plug 'prabirshrestha/asyncomplete-tags.vim'
+                Plug 'Shougo/neco-syntax'
+                Plug 'prabirshrestha/asyncomplete-necovim.vim'
+                Plug 'prabirshrestha/asyncomplete-necosyntax.vim'
+                if g:complete_snippet == 'ultisnips'
+                    Plug 'prabirshrestha/asyncomplete-ultisnips.vim'
+                elseif g:complete_snippet == 'neosnippet'
+                    Plug 'prabirshrestha/asyncomplete-neosnippet.vim'
+                endif
+            elseif g:complete_engine == "neocomplete"
+                Plug 'Shougo/neoinclude.vim'
+                Plug 'Shougo/neocomplete.vim'
+            elseif g:complete_engine == "neocomplcache"
+                Plug 'Shougo/neocomplcache.vim'
+                if g:complete_snippet == 'ultisnips'
+                    Plug 'JazzCore/neocomplcache-ultisnips'
+                endif
+            elseif g:complete_engine == "YCM"
+                if g:python_version == 2
+                    Plug 'Valloric/YouCompleteMe',{ 'do' : 'python2 ./install.py --clang-completer' }
+                elseif g:python_version == 3
+                    Plug 'Valloric/YouCompleteMe',{ 'do' : 'python3 ./install.py --clang-completer' }
+                endif
+            endif
+endif
+"}
+
+call plug#end()
